@@ -5,7 +5,6 @@ import joblib
 import os
 import math
 # from utils.collaborative import get_top_n_recommendations
-from surprise import dump
 
 # ====== Load mô hình & dữ liệu ======
 @st.cache_resource
