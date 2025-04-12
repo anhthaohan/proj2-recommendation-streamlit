@@ -4,7 +4,8 @@ import pandas as pd
 import joblib
 import os
 import math
-from utils.collaborative import get_top_n_recommendations
+# from utils.collaborative import get_top_n_recommendations
+from surprise import dump
 
 # ====== Load mô hình & dữ liệu ======
 @st.cache_resource
@@ -21,7 +22,8 @@ def load_cf_model():
     if not os.path.exists(path):
         st.error("❌ Không tìm thấy file collaborative_model_svd.pkl")
         st.stop()
-    return joblib.load(path)
+    _, model = dump.load(path)  # Load đúng định dạng mới
+    return model
 
 @st.cache_data
 def load_products():
