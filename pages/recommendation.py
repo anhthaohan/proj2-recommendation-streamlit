@@ -7,7 +7,7 @@ import os
 # ====== Load mô hình & dữ liệu ======
 @st.cache_resource
 def load_cb_model():
-    path = "models/content_based_model.pkl"
+    path = "models/content_based_model_top1000.pkl"
     if not os.path.exists(path):
         st.error("❌ Không tìm thấy file content_based_model.pkl")
         st.stop()
@@ -76,11 +76,13 @@ def product_recommendation():
     if method == "Gợi ý theo nội dung":
         model_cb = load_cb_model()
 
+        from utils.content_based_top1000 import search_and_recommend_top10, recommend_by_product_id_top10
+
         search_mode = st.radio("Chọn cách tìm kiếm:", ["Từ khóa", "Mã sản phẩm"])
         if search_mode == "Từ khóa":
             keyword = st.text_input("Nhập từ khóa (ví dụ: áo thun)")
             if st.button("Gợi ý", key="btn_cb_keyword"):
-                result = model_cb.search_and_recommend(keyword, top_k=10)
+                result = search_and_recommend_top10(model_cb, keyword, top_k=10)
                 display_recommendations(result, is_cb=True)
 
         elif search_mode == "Mã sản phẩm":
@@ -89,7 +91,7 @@ def product_recommendation():
 
             if st.button("Gợi ý", key="btn_cb_product"):
                 try:
-                    result = model_cb.recommend_by_product_id(product_id, top_k=10)
+                    result = recommend_by_product_id_top10(model_cb, product_id, top_k=10)
                     display_recommendations(result, is_cb=True)
                 except Exception as e:
                     st.error(f"Lỗi: {e}")
