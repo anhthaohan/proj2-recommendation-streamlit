@@ -1,9 +1,7 @@
-# build_collaborative_model.py
+# python3 build_collaborative_model.py
 import pandas as pd
-import joblib
-from surprise import Dataset, Reader, SVD
-from surprise.model_selection import train_test_split
 import os
+from surprise import Dataset, Reader, SVD, dump
 
 # ===== Bước 1: Đọc dữ liệu gốc =====
 rating_path = "data/Products_ThoiTrangNam_rating_clean.csv"
@@ -27,8 +25,8 @@ print("🤖 Đang huấn luyện mô hình SVD...")
 model.fit(trainset)
 print("✅ Huấn luyện xong.")
 
-# ===== Bước 4: Lưu mô hình =====
+# ===== Bước 4: Lưu mô hình bằng dump của Surprise =====
 os.makedirs("models", exist_ok=True)
 model_path = "models/collaborative_model_svd.pkl"
-joblib.dump(model, model_path)
+dump.dump(model_path, algo=model)
 print(f"💾 Mô hình đã lưu tại: {model_path}")
