@@ -38,9 +38,11 @@ def display_recommendations(result_df, is_cb=True):
         for _, row in result_df.iterrows():
             with st.container():
                 cols = st.columns([1, 4])
+
                 with cols[0]:
                     image_url = row.get("image", "")
-                    if isinstance(image_url, str) and image_url.startswith("http"):
+                    # Hiển thị ảnh nếu là đường dẫn hợp lệ HTTP và không chứa từ "no_image"
+                    if isinstance(image_url, str) and image_url.startswith("http") and "no_image" not in image_url.lower():
                         st.image(image_url, width=120)
                     else:
                         st.image("images/no_image.jpg", width=120)
@@ -119,7 +121,8 @@ def product_recommendation():
             'sub_category': 'Loại sản phẩm',
             'price': 'Giá',
             'rating': 'Đánh giá',
-            'description': 'Mô tả'
+            'description': 'Mô tả',
+            'image': 'image'
         }, inplace=True)
         display_recommendations(rated_products, is_cb=False)
 
