@@ -4,6 +4,7 @@ import pandas as pd
 import joblib
 import os
 import math
+from utils.collaborative import get_top_n_recommendations
 
 # ====== Load mô hình & dữ liệu ======
 @st.cache_resource
