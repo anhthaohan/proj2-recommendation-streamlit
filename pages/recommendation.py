@@ -18,11 +18,14 @@ def load_cb_model():
 
 @st.cache_resource
 def load_cf_model():
+    from surprise import dump
+
     path = "models/collaborative_model_svd.pkl"
     if not os.path.exists(path):
         st.error("❌ Không tìm thấy file collaborative_model_svd.pkl")
         st.stop()
-    _, model = dump.load(path)  # Load đúng định dạng mới
+
+    model, _ = dump.load(path)  # trả về (algo, predictions)
     return model
 
 @st.cache_data
