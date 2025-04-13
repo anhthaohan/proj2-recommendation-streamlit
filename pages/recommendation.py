@@ -66,9 +66,6 @@ def display_recommendations(result_df, is_cb=True):
 
 # ====== Giao diện chính gợi ý ======
 def product_recommendation():
-    from utils.content_based_top1000 import search_and_recommend_top10, recommend_by_product_id_top10
-    from utils.collaborative import get_top_n_recommendations
-
     st.header("🎯 Hệ thống gợi ý sản phẩm")
 
     method = st.selectbox("🔍 Chọn phương pháp gợi ý:", ["Gợi ý theo nội dung", "Gợi ý theo người dùng"])
@@ -76,6 +73,7 @@ def product_recommendation():
 
     if method == "Gợi ý theo nội dung":
         model_cb = load_cb_model()
+        from utils.content_based_top1000 import search_and_recommend_top10, recommend_by_product_id_top10
 
         search_mode = st.radio("Chọn cách tìm kiếm:", ["Từ khóa", "Mã sản phẩm"])
         if search_mode == "Từ khóa":
@@ -96,6 +94,7 @@ def product_recommendation():
                     st.error(f"Lỗi: {e}")
 
     elif method == "Gợi ý theo người dùng":
+        from utils.collaborative import get_top_n_recommendations
         model_cf = load_cf_model()
         ratings_df = load_ratings()
 
