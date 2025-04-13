@@ -17,13 +17,11 @@ def load_cb_model():
 
 @st.cache_resource
 def load_cf_model():
-    from surprise import dump
     path = "models/collaborative_model_svd.pkl"
     if not os.path.exists(path):
         st.error("❌ Không tìm thấy file collaborative_model_svd.pkl")
         st.stop()
-    _, model = dump.load(path)  # sử dụng dump.load để tránh lỗi ModuleNotFoundError
-    return model
+    return joblib.load(path)
 
 @st.cache_data
 def load_products():
