@@ -4,7 +4,6 @@ import pandas as pd
 import joblib
 import os
 import math
-# from utils.collaborative import get_top_n_recommendations
 
 # ====== Load mô hình & dữ liệu ======
 @st.cache_resource
@@ -39,11 +38,9 @@ def display_recommendations(result_df, is_cb=True):
         for _, row in result_df.iterrows():
             with st.container():
                 cols = st.columns([1, 4])
-
                 with cols[0]:
                     image_url = row.get("image", "")
-                    # Hiển thị ảnh nếu là đường dẫn hợp lệ HTTP và không chứa từ "no_image"
-                    if isinstance(image_url, str) and image_url.startswith("http") and "no_image" not in image_url.lower():
+                    if isinstance(image_url, str) and image_url.startswith("http"):
                         st.image(image_url, width=120)
                     else:
                         st.image("images/no_image.jpg", width=120)
@@ -69,6 +66,9 @@ def display_recommendations(result_df, is_cb=True):
 
 # ====== Giao diện chính gợi ý ======
 def product_recommendation():
+    from utils.content_based_top1000 import search_and_recommend_top10, recommend_by_product_id_top10
+    from utils.collaborative import get_top_n_recommendations
+
     st.header("🎯 Hệ thống gợi ý sản phẩm")
 
     method = st.selectbox("🔍 Chọn phương pháp gợi ý:", ["Gợi ý theo nội dung", "Gợi ý theo người dùng"])
@@ -81,7 +81,7 @@ def product_recommendation():
         if search_mode == "Từ khóa":
             keyword = st.text_input("Nhập từ khóa (ví dụ: áo thun)")
             if st.button("Gợi ý", key="btn_cb_keyword"):
-                result = model_cb.search_and_recommend(keyword, top_k=10)
+                result = search_and_recommend_top10(model_cb, keyword, top_k=10)
                 display_recommendations(result, is_cb=True)
 
         elif search_mode == "Mã sản phẩm":
@@ -90,13 +90,12 @@ def product_recommendation():
 
             if st.button("Gợi ý", key="btn_cb_product"):
                 try:
-                    result = model_cb.recommend_by_product_id(product_id, top_k=10)
+                    result = recommend_by_product_id_top10(model_cb, product_id, top_k=10)
                     display_recommendations(result, is_cb=True)
                 except Exception as e:
                     st.error(f"Lỗi: {e}")
 
     elif method == "Gợi ý theo người dùng":
-        from utils.collaborative import get_top_n_recommendations
         model_cf = load_cf_model()
         ratings_df = load_ratings()
 
