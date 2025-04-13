@@ -28,6 +28,6 @@ print("✅ Huấn luyện xong.")
 
 # ===== Bước 4: Lưu mô hình bằng joblib =====
 os.makedirs("models", exist_ok=True)
-model_path = "models/collaborative_model_svd.pkl"
+model_path = "models/collaborative_model_svd.joblib"  # khuyến khích dùng .joblib
 joblib.dump(model, model_path)
 print(f"💾 Mô hình đã lưu tại: {model_path} (dùng joblib)")

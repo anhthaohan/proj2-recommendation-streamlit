@@ -16,9 +16,9 @@ def load_cb_model():
 
 @st.cache_resource
 def load_cf_model():
-    path = "models/collaborative_model_svd.pkl"
+    path = "models/collaborative_model_svd.joblib"
     if not os.path.exists(path):
-        st.error("❌ Không tìm thấy file collaborative_model_svd.pkl")
+        st.error("❌ Không tìm thấy file collaborative_model_svd.joblib")
         st.stop()
     return joblib.load(path)
 
